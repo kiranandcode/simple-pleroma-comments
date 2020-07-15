@@ -1,0 +1,19 @@
+(executable
+ (name pleroma_comments)
+ (libraries core_kernel base js_of_ocaml-tyxml js_of_ocaml js_of_ocaml-lwt cohttp cohttp-lwt-jsoo lwt yojson)
+ (modes byte)
+  (preprocess (pps js_of_ocaml-ppx))
+)
+
+(rule
+ (targets pleroma_comments.js)
+ (action
+  (run %{bin:js_of_ocaml} +base/runtime.js --opt 3
+  --source-map %{dep:pleroma_comments.bc} -o %{targets} --pretty)
+ )
+)
+
+(alias
+ (name default)
+  (deps pleroma_comments.js index.html)
+)
